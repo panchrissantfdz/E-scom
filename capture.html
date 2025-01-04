@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture | E-scom</title>
+    <link rel="shortcut icon" href="./images/Logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/capture.css">
+    <script defer src="capture.js"></script>
+    <script src="https://kit.fontawesome.com/d8df87160d.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+
+<body>
+    <header class="header">
+        <nav class="topnavbar">
+            <ul class="left-nav nav">
+                <li class="nav-item nav-izq"> <a href="./index.html"> Home </a> </li>
+                <li class="nav-item nav-izq"> <a href="./items.html"> Artículos </a> </li>
+                <li class="nav-item nav-izq"> <a href="./index.html"> <i class="fa-solid fa-cart-shopping"></i> Carrito </a></li></ul>
+        </nav>
+    </header>
+
+
+
+    <div class="container">    
+        <form id="captureForm">
+            <label for="nombre">Nombre del artículo:</label><br>
+            <input type="text" id="nombre" name="nombre" ><br><br>
+
+            <label for="descripcion">Descripción:</label><br>
+            <textarea id="descripcion" name="descripcion" ></textarea><br><br>
+
+            <label for="precio">Precio:</label><br>
+            <input type="number" id="precio" name="precio" step="0.01" ><br><br>
+
+            <label for="cantidad">Cantidad:</label><br>
+            <input type="number" id="cantidad" name="cantidad" ><br><br>
+
+            <label for="foto">Subir foto del artículo:</label><br>
+            <input type="file" id="foto" name="foto" accept="image/*" ><br><br>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+</body>
+
+</html>
