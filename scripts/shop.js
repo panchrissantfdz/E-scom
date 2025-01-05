@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para mostrar los artículos del carrito
     function displayCartItems() {
-        fetch('http://135.232.96.13:8080/Servicio/rest/ws/consulta_carrito', {
+        fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
             method: "GET"
         }).then(res => res.json()).then(cartItems => {
             cartItemsContainer.innerHTML = '';
@@ -17,8 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${item.descripcion}</p>
                     <div class="price">$${item.precio.toFixed(2)}</div>
                     <div class="quantity">Cantidad: ${item.cantidad}</div>
-                    <button class="remove-button" data-id="${item.id}">Eliminar</button>
-                `;
+                    <button class="remove-button" data-id="${item.id}">Eliminar</button>`;
 
                 cartItemsContainer.appendChild(cartItem);
             });
