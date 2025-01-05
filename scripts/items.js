@@ -33,38 +33,41 @@ function loadFilteredItems(searchQuery) {
 
 
 function addToCart(articleId) {
+    // Obtener el input de cantidad usando el ID del artículo
     const quantityInput = document.getElementById(`quantity-${articleId}`);
     const quantity = parseInt(quantityInput.value, 10);
 
+    // Validar que se haya ingresado un número mayor a 0
     if (isNaN(quantity) || quantity <= 0) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
     }
 
+    // Llamar a la API para agregar el artículo al carrito
     fetch(API_URL_ADD_TO_CART, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             carrito: {
                 id_articulo: articleId,
-                cantidad: quantity
+                cantidad: quantity, // Enviar la cantidad exacta ingresada por el usuario
             }
         })
     })
-        .then(async res => {
-            if (!res.ok) {
-                throw new Error(`Error del servidor: ${res.status} ${res.statusText}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            alert("Artículo agregado al carrito exitosamente.");
-            console.log("Respuesta del servidor:", data);
-        })
-        .catch(error => {
-            console.error("Error al agregar al carrito:", error.message);
-            alert("Ocurrió un error al agregar el artículo al carrito.");
-        });
+    .then(async res => {
+        if (!res.ok) {
+            throw new Error(`Error del servidor: ${res.status} ${res.statusText}`);
+        }
+        return res.json();
+    })
+    .then(data => {
+        alert("Artículo agregado al carrito exitosamente.");
+        console.log("Respuesta del servidor:", data);
+    })
+    .catch(error => {
+        console.error("Error al agregar al carrito:", error.message);
+        alert("Ocurrió un error al agregar el artículo al carrito.");
+    });
 }
 
 
