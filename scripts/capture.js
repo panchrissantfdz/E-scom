@@ -13,7 +13,7 @@ document.getElementById('captureForm').addEventListener('submit', function(event
 
         const newItem = { nombre, descripcion, precio, cantidad, foto: fotoData };
 
-        fetch('https://t9-2021630245.azurewebsites.net/api/AltaArticulo?', {
+        fetch('https://t9-2021630245.azurewebsites.net/api/AltaArticulo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
