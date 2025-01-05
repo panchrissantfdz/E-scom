@@ -32,31 +32,29 @@ function loadFilteredItems(searchQuery) {
 
 // Función para agregar un artículo al carrito
 function addToCart(articleId) {
-    // Verificar que se proporcione un ID de artículo válido
     if (!articleId) {
         alert("El ID del artículo es requerido.");
         console.error("ID del artículo no válido:", articleId);
         return;
     }
 
-    // Obtener y validar la cantidad ingresada por el usuario
+    // Obtener el input de cantidad usando el ID del artículo
     const quantityInput = document.getElementById(`quantity-${articleId}`);
     const quantity = parseInt(quantityInput?.value, 10);
 
+    // Validar que se haya ingresado una cantidad válida
     if (!quantityInput || isNaN(quantity) || quantity <= 0) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
     }
 
-    // Construir el cuerpo de la solicitud en el formato correcto
+    // Construir el cuerpo de la solicitud
     const requestBody = {
         carrito: {
-            id_articulo: articleId,
+            id_articulo: parseInt(articleId, 10), // Convertir a número
             cantidad: quantity
         }
     };
-
-    console.log("Datos enviados al servidor:", requestBody);
 
     // Enviar la solicitud al servidor
     fetch(API_URL_ADD_TO_CART, {
@@ -82,6 +80,7 @@ function addToCart(articleId) {
 }
 
 
+
 // Función para renderizar artículos en el contenedor
 function renderItems(items) {
     const container = document.getElementById("items-container");
@@ -98,25 +97,25 @@ function renderItems(items) {
 
         // Agregar nombre y detalles del artículo
         const nombre = document.createElement("h2");
-        nombre.textContent = item.nombre;
+        nombre.textContent = item.nombre || "Artículo sin nombre";
         itemDiv.appendChild(nombre);
 
         const descripcion = document.createElement("p");
-        descripcion.textContent = item.descripcion;
+        descripcion.textContent = item.descripcion || "Sin descripción";
         itemDiv.appendChild(descripcion);
 
         const precio = document.createElement("p");
-        precio.textContent = `Precio: $${item.precio}`;
+        precio.textContent = `Precio: $${item.precio || "No disponible"}`;
         itemDiv.appendChild(precio);
 
         const cantidad = document.createElement("p");
-        cantidad.textContent = `Cantidad disponible: ${item.cantidad}`;
+        cantidad.textContent = `Cantidad disponible: ${item.cantidad || 0}`;
         itemDiv.appendChild(cantidad);
 
         if (item.foto) {
             const foto = document.createElement("img");
             foto.src = `data:image/jpeg;base64,${item.foto}`;
-            foto.alt = item.nombre;
+            foto.alt = item.nombre || "Artículo";
             itemDiv.appendChild(foto);
         }
 
@@ -128,22 +127,24 @@ function renderItems(items) {
         cantidadToAdd.setAttribute("id", `quantity-${item.id}`);
         itemDiv.appendChild(cantidadToAdd);
 
-        // Botón para agregar al carrito
+        // Botón para agregar al carrito con data-id
         const addToCartButton = document.createElement("button");
         addToCartButton.classList.add("agregar-carrito-btn");
         addToCartButton.textContent = "Agregar al Carrito";
 
-        // Imprimir el ID del artículo y mandarlo a addToCart
-        console.log("ID del artículo:", item.id);
-        addToCartButton.addEventListener("click", () => {
-            console.log("ID enviado a addToCart:", item.id);
-            addToCart(item.id);
+        // Asociar ID del artículo en un atributo data-id
+        addToCartButton.setAttribute("data-id", item.id);
+        addToCartButton.addEventListener("click", (event) => {
+            const articleId = event.target.getAttribute("data-id");
+            console.log("ID enviado a addToCart:", articleId);
+            addToCart(articleId); // Pasar el ID del artículo
         });
 
         itemDiv.appendChild(addToCartButton);
         container.appendChild(itemDiv);
     });
 }
+
 
 // Función para manejar la búsqueda
 function handleSearch() {
