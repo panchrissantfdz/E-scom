@@ -1,7 +1,6 @@
 const API_URL_ALL = "https://t9-2021630245.azurewebsites.net/api/TodosArticulos";
 const API_URL_SEARCH = "https://t9-2021630245.azurewebsites.net/api/ConsultaArticulo?";
-const API_URL_ADD_TO_CART = "https://t9-2021630245.azurewebsites.net/api/AgregaCarrito?";
-
+const API_URL_ADD_TO_CART = "https://t9-2021630245.azurewebsites.net/api/AgregaCarrito";
 
 // Función para cargar todos los artículos (GET)
 function loadAllItems() {
@@ -31,13 +30,18 @@ function loadFilteredItems(searchQuery) {
         });
 }
 
-
+// Función para agregar un artículo al carrito
 function addToCart(articleId) {
-    // Obtener el input de cantidad usando el ID del artículo
     const quantityInput = document.getElementById(`quantity-${articleId}`);
+
+    // Validar que el input exista y contenga un valor válido
+    if (!quantityInput) {
+        alert("Error: No se encontró el campo de cantidad.");
+        return;
+    }
+
     const quantity = parseInt(quantityInput.value, 10);
 
-    // Validar que se haya ingresado un número mayor a 0
     if (isNaN(quantity) || quantity <= 0) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
@@ -50,7 +54,7 @@ function addToCart(articleId) {
         body: JSON.stringify({
             carrito: {
                 id_articulo: articleId,
-                cantidad: quantity, // Enviar la cantidad exacta ingresada por el usuario
+                cantidad: quantity,
             }
         })
     })
@@ -70,7 +74,7 @@ function addToCart(articleId) {
     });
 }
 
-
+// Función para renderizar artículos en el contenedor
 function renderItems(items) {
     const container = document.getElementById("items-container");
     container.innerHTML = ""; // Limpiar resultados previos
@@ -97,7 +101,7 @@ function renderItems(items) {
         itemDiv.appendChild(precio);
 
         const cantidad = document.createElement("p");
-        cantidad.textContent = `Cantidad: ${item.cantidad}`;
+        cantidad.textContent = `Cantidad disponible: ${item.cantidad}`;
         itemDiv.appendChild(cantidad);
 
         if (item.foto) {
@@ -114,16 +118,15 @@ function renderItems(items) {
         cantidadToAdd.setAttribute("id", `quantity-${item.id}`);
         itemDiv.appendChild(cantidadToAdd);
 
-        const addToCartButton = document.createElement("button"); // Renombramos aquí
+        const addToCartButton = document.createElement("button");
         addToCartButton.classList.add("agregar-carrito-btn");
         addToCartButton.textContent = "Agregar al Carrito";
-        addToCartButton.addEventListener("click", () => addToCart(item.id)); // Aquí se llama correctamente
+        addToCartButton.addEventListener("click", () => addToCart(item.id));
         itemDiv.appendChild(addToCartButton);
 
         container.appendChild(itemDiv);
     });
 }
-
 
 // Función para manejar la búsqueda
 function handleSearch() {
@@ -134,8 +137,6 @@ function handleSearch() {
         loadAllItems(); // Cargar todos los productos si no hay búsqueda
     }
 }
-
-
 
 // Inicializar los eventos
 window.onload = () => {
