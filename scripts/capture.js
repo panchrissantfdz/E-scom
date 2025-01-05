@@ -21,7 +21,7 @@ document.getElementById('captureForm').addEventListener('submit', function(event
             body: JSON.stringify(newItem)
         }).then(res => res.json()).then(data => {
             console.log(data);
-            window.location.href = 'items.html';
+            
         }).catch(error => console.error('Error:', error));
     };
     reader.readAsDataURL(foto);
