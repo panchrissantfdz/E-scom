@@ -173,19 +173,16 @@ h1 {
 
 .item button {
     background-color: #db5858;
-    width: 40px;
+    width: 100px;
     height: 40px;
-    padding: 0px;
-    position: absolute;
+    /* padding: 0px; */
+    /* position: absolute; */
     border: 0;
     bottom: 0;
-    /* Colocar en la parte inferior */
-    left: 50%;
-    /* Centrar horizontalmente */
-    transform: translateX(-50%);
-    /* Ajustar para centrar */
-    margin: auto;
-    border-radius: 0 5px 5px 0;
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    /* margin: auto; */
+    border-radius: 5px 5px 5px;
     color: white;
     cursor: pointer;
 }
@@ -195,15 +192,17 @@ h1 {
 }
 
 .item input {
-    width: 40px;
+    width: 100px;
     height: 40px;
-    padding: 10 px;
+    padding: 0 px;
     padding-right: 35px;
-    border-radius: 6px 0 0;
+    border-radius: 5px 5px;
     border: 0;
     outline: none;
     font-size: 1rem;
-
+    /* border-block-color: black; */
+    border: 1px solid #be556f;
+    /* justify-self: auto; */
 }
 
 @media (max-width: 768px) {
