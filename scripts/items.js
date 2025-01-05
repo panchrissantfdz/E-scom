@@ -32,17 +32,23 @@ function loadFilteredItems(searchQuery) {
 
 // Función para agregar un artículo al carrito
 function addToCart(articleId) {
-    // Obtener el input de cantidad usando el ID del artículo
+    // Verificar que se proporcione un ID de artículo válido
+    if (!articleId) {
+        alert("El ID del artículo es requerido.");
+        console.error("ID del artículo no válido:", articleId);
+        return;
+    }
+
+    // Obtener y validar la cantidad ingresada por el usuario
     const quantityInput = document.getElementById(`quantity-${articleId}`);
     const quantity = parseInt(quantityInput?.value, 10);
 
-    // Validar que se haya ingresado una cantidad válida
     if (!quantityInput || isNaN(quantity) || quantity <= 0) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
     }
 
-    // Construir el cuerpo de la solicitud
+    // Construir el cuerpo de la solicitud en el formato correcto
     const requestBody = {
         carrito: {
             id_articulo: articleId,
@@ -50,27 +56,29 @@ function addToCart(articleId) {
         }
     };
 
+    console.log("Datos enviados al servidor:", requestBody);
+
     // Enviar la solicitud al servidor
     fetch(API_URL_ADD_TO_CART, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)
     })
-    .then(async res => {
-        if (!res.ok) {
-            const errorResponse = await res.json();
-            throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
-        }
-        return res.json();
-    })
-    .then(data => {
-        alert("Artículo agregado al carrito exitosamente.");
-        console.log("Respuesta del servidor:", data);
-    })
-    .catch(error => {
-        console.error("Error al agregar al carrito:", error.message);
-        alert(`Error al agregar el artículo al carrito: ${error.message}`);
-    });
+        .then(async res => {
+            if (!res.ok) {
+                const errorResponse = await res.json();
+                throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            alert("Artículo agregado al carrito exitosamente.");
+            console.log("Respuesta del servidor:", data);
+        })
+        .catch(error => {
+            console.error("Error al agregar al carrito:", error.message);
+            alert(`Error al agregar el artículo al carrito: ${error.message}`);
+        });
 }
 
 
