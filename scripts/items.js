@@ -1,6 +1,6 @@
 const API_URL_ALL = "https://t9-2021630245.azurewebsites.net/api/TodosArticulos";
 const API_URL_SEARCH = "https://t9-2021630245.azurewebsites.net/api/ConsultaArticulo?";
-const API_URL_ADD_TO_CART = "https://t9-2021630245.azurewebsites.net/api/AgregaCarrito";
+const API_URL_ADD_TO_CART = "https://t9-2021630245.azurewebsites.net/api/AgregaCarrito?";
 
 
 // Función para cargar todos los artículos (GET)
@@ -68,7 +68,6 @@ function addToCart(articleId) {
 }
 
 
-// Función para renderizar artículos en el contenedor
 function renderItems(items) {
     const container = document.getElementById("items-container");
     container.innerHTML = ""; // Limpiar resultados previos
@@ -108,17 +107,20 @@ function renderItems(items) {
         const cantidadToAdd = document.createElement("input");
         cantidadToAdd.classList.add("cantidad-input");
         cantidadToAdd.setAttribute("placeholder", "Cantidad");
+        cantidadToAdd.setAttribute("type", "number");
+        cantidadToAdd.setAttribute("id", `quantity-${item.id}`);
         itemDiv.appendChild(cantidadToAdd);
 
-        const addToCart = document.createElement("button");
-        addToCart.classList.add("agregar-carrito-btn");
-        addToCart.textContent = "Agregar al Carrito";
-        addToCart.addEventListener("click", () => addToCart(item.id));
-        itemDiv.appendChild(addToCart);
+        const addToCartButton = document.createElement("button"); // Renombramos aquí
+        addToCartButton.classList.add("agregar-carrito-btn");
+        addToCartButton.textContent = "Agregar al Carrito";
+        addToCartButton.addEventListener("click", () => addToCart(item.id)); // Aquí se llama correctamente
+        itemDiv.appendChild(addToCartButton);
 
         container.appendChild(itemDiv);
     });
 }
+
 
 // Función para manejar la búsqueda
 function handleSearch() {
