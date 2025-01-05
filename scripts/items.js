@@ -1,5 +1,7 @@
 const API_URL_ALL = "https://t9-2021630245.azurewebsites.net/api/TodosArticulos";
-const API_URL_SEARCH = "https://t9-2021630245.azurewebsites.net/api/ConsultaArticulo";
+const API_URL_SEARCH = "https://t9-2021630245.azurewebsites.net/api/ConsultaArticulo?";
+const API_URL_ADD_TO_CART = "https://t9-2021630245.azurewebsites.net/api/AgregaCarrito";
+
 
 // Función para cargar todos los artículos (GET)
 function loadAllItems() {
@@ -79,6 +81,42 @@ function handleSearch() {
         loadAllItems(); // Cargar todos los productos si no hay búsqueda
     }
 }
+
+function addToCart(articleId) {
+    const quantityInput = document.getElementById(`quantity-${articleId}`);
+    const quantity = parseInt(quantityInput.value, 10);
+
+    if (isNaN(quantity) || quantity <= 0) {
+        alert("Por favor, ingresa una cantidad válida.");
+        return;
+    }
+
+    fetch(API_URL_ADD_TO_CART, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            carrito: {
+                id_articulo: articleId,
+                cantidad: quantity
+            }
+        })
+    })
+        .then(async res => {
+            if (!res.ok) {
+                throw new Error(`Error del servidor: ${res.status} ${res.statusText}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            alert("Artículo agregado al carrito exitosamente.");
+            console.log("Respuesta del servidor:", data);
+        })
+        .catch(error => {
+            console.error("Error al agregar al carrito:", error.message);
+            alert("Ocurrió un error al agregar el artículo al carrito.");
+        });
+}
+
 
 // Inicializar los eventos
 window.onload = () => {

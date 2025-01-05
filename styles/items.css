@@ -65,7 +65,7 @@ input{
 
 }
 
-button{
+.boton1{
     background-color: #db5858;
     width: 40px;
     height: 40px;
@@ -81,11 +81,39 @@ button{
     cursor: pointer;
 }
 
-button:hover{
+.boton1:hover{
     background-color: #662929;
 }
 
+.cart-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
 
+.cart-actions input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.cart-actions .add-to-cart {
+    background-color: #db5858;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.cart-actions .add-to-cart:hover {
+    background-color: #662929;
+}
 
 .nav-extra a {
     color: white;
