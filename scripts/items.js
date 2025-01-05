@@ -96,6 +96,7 @@ function renderItems(items) {
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("item");
 
+        // Agregar nombre y detalles del artículo
         const nombre = document.createElement("h2");
         nombre.textContent = item.nombre;
         itemDiv.appendChild(nombre);
@@ -119,6 +120,7 @@ function renderItems(items) {
             itemDiv.appendChild(foto);
         }
 
+        // Input para cantidad
         const cantidadToAdd = document.createElement("input");
         cantidadToAdd.classList.add("cantidad-input");
         cantidadToAdd.setAttribute("placeholder", "Cantidad");
@@ -126,12 +128,19 @@ function renderItems(items) {
         cantidadToAdd.setAttribute("id", `quantity-${item.id}`);
         itemDiv.appendChild(cantidadToAdd);
 
+        // Botón para agregar al carrito
         const addToCartButton = document.createElement("button");
         addToCartButton.classList.add("agregar-carrito-btn");
         addToCartButton.textContent = "Agregar al Carrito";
-        addToCartButton.addEventListener("click", () => addToCart(item.id));
-        itemDiv.appendChild(addToCartButton);
 
+        // Imprimir el ID del artículo y mandarlo a addToCart
+        console.log("ID del artículo:", item.id);
+        addToCartButton.addEventListener("click", () => {
+            console.log("ID enviado a addToCart:", item.id);
+            addToCart(item.id);
+        });
+
+        itemDiv.appendChild(addToCartButton);
         container.appendChild(itemDiv);
     });
 }
