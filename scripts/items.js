@@ -32,35 +32,34 @@ function loadFilteredItems(searchQuery) {
 
 // Función para agregar un artículo al carrito
 function addToCart(articleId) {
+    // Obtener el input de cantidad usando el ID del artículo
     const quantityInput = document.getElementById(`quantity-${articleId}`);
+    const quantity = parseInt(quantityInput?.value, 10);
 
-    // Validar que el input exista y contenga un valor válido
-    if (!quantityInput) {
-        alert("Error: No se encontró el campo de cantidad.");
-        return;
-    }
-
-    const quantity = parseInt(quantityInput.value, 10);
-
-    if (isNaN(quantity) || quantity <= 0) {
+    // Validar que se haya ingresado una cantidad válida
+    if (!quantityInput || isNaN(quantity) || quantity <= 0) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
     }
 
-    // Llamar a la API para agregar el artículo al carrito
+    // Construir el cuerpo de la solicitud
+    const requestBody = {
+        carrito: {
+            id_articulo: articleId,
+            cantidad: quantity
+        }
+    };
+
+    // Enviar la solicitud al servidor
     fetch(API_URL_ADD_TO_CART, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            carrito: {
-                id_articulo: articleId,
-                cantidad: quantity,
-            }
-        })
+        body: JSON.stringify(requestBody)
     })
     .then(async res => {
         if (!res.ok) {
-            throw new Error(`Error del servidor: ${res.status} ${res.statusText}`);
+            const errorResponse = await res.json();
+            throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
         }
         return res.json();
     })
@@ -70,9 +69,10 @@ function addToCart(articleId) {
     })
     .catch(error => {
         console.error("Error al agregar al carrito:", error.message);
-        alert("Ocurrió un error al agregar el artículo al carrito.");
+        alert(`Error al agregar el artículo al carrito: ${error.message}`);
     });
 }
+
 
 // Función para renderizar artículos en el contenedor
 function renderItems(items) {
