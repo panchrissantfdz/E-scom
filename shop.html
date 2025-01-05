@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compra de Artículos</title>
+    <title>Carrito de Compras</title>
     <link rel="stylesheet" href="styles/shop.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -14,16 +14,18 @@
         <nav class="topnavbar">
             <ul class="left-nav nav">
                 <li class="nav-item nav-izq"> <a href="./index.html"> Home </a> </li>
-                <li class="nav-item nav-izq"> <a href="#"> Artículos </a> </li>
-                <li class="nav-item nav-izq"> <a href="./cart.html"> <i class="fa-solid fa-cart-shopping"></i> Carrito
-                    </a></li>
+                <li class="nav-item nav-izq"> <a href="./items.html"> Artículos </a> </li>
             </ul>
+            <button id="purchase-button" class="nav-button">Realizar Compra</button>
         </nav>
     </header>
 
     <div class="container">
-        <div class="product-list">
-            <!-- Aquí se generarán los artículos dinámicamente -->
+        <div class="cart-list">
+            <h2>Carrito</h2>
+            <div id="cart-items">
+                <!-- Aquí se mostrarán los artículos del carrito -->
+            </div>
         </div>
     </div>
 
