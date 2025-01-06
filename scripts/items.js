@@ -62,8 +62,8 @@ function addToCart(articleId) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)
     })
-    .then(async res => {
-        const errorResponse = await res.json();
+    .then(res => {
+        const errorResponse = res.json();
         if (!res.ok) {
             throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
         }
