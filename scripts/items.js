@@ -50,9 +50,9 @@ function addToCart(articleId) {
 
     // Construir el cuerpo de la solicitud
     const requestBody = {
-        carrito: {
-            id_articulo: parseInt(articleId, 10), // Convertir a número
-            cantidad: quantity
+        "carrito": {
+            "id_articulo": parseInt(articleId, 10), // Convertir a número
+            "cantidad": quantity
         }
     };
 
@@ -62,21 +62,21 @@ function addToCart(articleId) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)
     })
-        .then(async res => {
-            if (!res.ok) {
-                const errorResponse = await res.json();
-                throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            alert("Artículo agregado al carrito exitosamente.");
-            console.log("Respuesta del servidor:", data);
-        })
-        .catch(error => {
-            console.error("Error al agregar al carrito:", error.message);
-            alert(`Error al agregar el artículo al carrito: ${error.message}`);
-        });
+    .then(async res => {
+        const errorResponse = await res.json();
+        if (!res.ok) {
+            throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
+        }
+        return errorResponse;
+    })
+    .then(data => {
+        alert("Artículo agregado al carrito exitosamente.");
+        console.log("Respuesta del servidor:", data);
+    })
+    .catch(error => {
+        console.error("Error al agregar al carrito:", error.message);
+        alert(`Error al agregar el artículo al carrito: ${error.message}`);
+    });
 }
 
 
