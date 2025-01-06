@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para eliminar un producto del carrito
     function removeFromCart(productId) {
-        fetch(`https://t9-2021630245.azurewebsites.net/api/EliminarArticulo/${productId}`, {
+        fetch(`https://t9-2021630245.azurewebsites.net/api/EliminaArticulo/${productId}`, {
             method: 'DELETE'
         }).then(res => res.json()).then(data => {
             console.log('Producto eliminado del carrito:', data);

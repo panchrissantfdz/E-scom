@@ -18,13 +18,6 @@ body {
 }
 
 
-
-
-
-
-
-
-
 .container {
     /* Opción 1 */
     font: italic normal 400 16px Arial, Verdana, sans-serif;
@@ -39,13 +32,17 @@ body {
 
 a{
     text-decoration: none;
-    color: rgb(12, 0, 11);
+    color: rgb(201, 199, 199);
     font-family: "Trebuchet MS", Arial, Verdana, sans-serif;
     font-weight: 400;
     font-style: normal;
     font-size: 18px;
     line-height: 22px;
 
+}
+
+a:hover{
+    color: rgb(255, 255, 255);
 }
 
 
