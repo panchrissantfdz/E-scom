@@ -7,7 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayCartItems() {
         fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
             method: "GET"
-        }).then(res => res.json()).then(cartItems => {
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    let resObject = text ? JSON.parse(text) : {};
+                    throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${resObject.message || "Sin detalles."}`);
+                });
+            }
+            return res.json();
+        }).then(cartItems => {
             renderCartItems(cartItems);
         }).catch(error => {
             console.error("Error al obtener los artículos del carrito:", error.message);
@@ -28,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemDiv = document.createElement("div");
             itemDiv.classList.add("item");
 
-            // Agregar nombre y detalles del artículo
             const nombre = document.createElement("h2");
             nombre.textContent = item.nombre || "Artículo sin nombre";
             itemDiv.appendChild(nombre);
@@ -52,16 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 itemDiv.appendChild(foto);
             }
 
-            // Botón para eliminar del carrito
             const removeFromCartButton = document.createElement("button");
             removeFromCartButton.classList.add("remove-cart-btn");
             removeFromCartButton.textContent = "Eliminar";
-
-            // Asociar ID del artículo en un atributo data-id
             removeFromCartButton.setAttribute("data-id", item["id_articulo"]);
             removeFromCartButton.addEventListener("click", (event) => {
                 const articleId = event.target.getAttribute("data-id");
-                removeFromCart(articleId); // Pasar el ID del artículo
+                removeFromCart(articleId);
             });
 
             itemDiv.appendChild(removeFromCartButton);
@@ -75,7 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id_articulo: productId })
-        }).then(res => res.json()).then(data => {
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    let resObject = text ? JSON.parse(text) : {};
+                    throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${resObject.message || "Sin detalles."}`);
+                });
+            }
+            return res.text().then(text => text ? JSON.parse(text) : {});
+        }).then(data => {
             console.log('Producto eliminado del carrito:', data);
             alert('Artículo eliminado exitosamente del carrito.');
             displayCartItems(); // Actualizar la lista de artículos del carrito
@@ -89,7 +101,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function purchaseCart() {
         fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
             method: "GET"
-        }).then(res => res.json()).then(cartItems => {
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    let resObject = text ? JSON.parse(text) : {};
+                    throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${resObject.message || "Sin detalles."}`);
+                });
+            }
+            return res.json();
+        }).then(cartItems => {
             const promises = cartItems.map(item =>
                 fetch('https://t9-2021630245.azurewebsites.net/api/EliminaCarrito', {
                     method: 'POST',
@@ -118,7 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearCart() {
         fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
             method: "GET"
-        }).then(res => res.json()).then(cartItems => {
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    let resObject = text ? JSON.parse(text) : {};
+                    throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${resObject.message || "Sin detalles."}`);
+                });
+            }
+            return res.json();
+        }).then(cartItems => {
             const promises = cartItems.map(item =>
                 fetch('https://t9-2021630245.azurewebsites.net/api/EliminaCarrito', {
                     method: 'POST',
