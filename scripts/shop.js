@@ -7,54 +7,75 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
             method: "GET"
         }).then(res => res.json()).then(cartItems => {
-            cartItemsContainer.innerHTML = '';
-            cartItems.forEach(item => {
-                const cartItem = document.createElement('div');
-                cartItem.classList.add('cart-item');
-
-                cartItem.innerHTML = `
-                    <h3>${item.nombre}</h3>
-                    <p>${item.descripcion}</p>
-                    <div class="price">$${item.precio.toFixed(2)}</div>
-                    <div class="quantity">Cantidad: ${item.cantidad}</div>
-                    <button class="remove-button" data-id="${item.id}">Eliminar</button>`;
-
-                cartItemsContainer.appendChild(cartItem);
-            });
+            renderCartItems(cartItems);
         }).catch(error => console.error('Error:', error));
+    }
+
+    // Función para renderizar artículos en el contenedor del carrito
+    function renderCartItems(items) {
+        cartItemsContainer.innerHTML = ""; // Limpiar resultados previos
+
+        if (!items.length) {
+            cartItemsContainer.innerHTML = "<p>No se encontraron artículos en el carrito.</p>";
+            return;
+        }
+
+        items.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("item");
+
+            // Agregar nombre y detalles del artículo
+            const nombre = document.createElement("h2");
+            nombre.textContent = item.nombre || "Artículo sin nombre";
+            itemDiv.appendChild(nombre);
+
+            const descripcion = document.createElement("p");
+            descripcion.textContent = item.descripcion || "Sin descripción";
+            itemDiv.appendChild(descripcion);
+
+            const precio = document.createElement("p");
+            precio.textContent = `Precio: $${item.precio || "No disponible"}`;
+            itemDiv.appendChild(precio);
+
+            const cantidad = document.createElement("p");
+            cantidad.textContent = `Cantidad: ${item.cantidad || 0}`;
+            itemDiv.appendChild(cantidad);
+
+            if (item.foto) {
+                const foto = document.createElement("img");
+                foto.src = `data:image/jpeg;base64,${item.foto}`;
+                foto.alt = item.nombre || "Artículo";
+                itemDiv.appendChild(foto);
+            }
+
+            // Botón para eliminar del carrito
+            const removeFromCartButton = document.createElement("button");
+            removeFromCartButton.classList.add("remove-cart-btn");
+            removeFromCartButton.textContent = "Eliminar";
+
+            // Asociar ID del artículo en un atributo data-id
+            removeFromCartButton.setAttribute("data-id", item["id_articulo"]);
+            removeFromCartButton.addEventListener("click", (event) => {
+                const articleId = event.target.getAttribute("data-id");
+                console.log("ID enviado a removeFromCart:", articleId);
+                removeFromCart(articleId); // Pasar el ID del artículo
+            });
+
+            itemDiv.appendChild(removeFromCartButton);
+            cartItemsContainer.appendChild(itemDiv);
+        });
     }
 
     // Función para eliminar un producto del carrito
     function removeFromCart(productId) {
-        fetch(`http://135.232.96.13:8080/ws/eliminar_articulo/${productId}`, {
+        fetch(`https://t9-2021630245.azurewebsites.net/api/EliminarArticulo/${productId}`, {
             method: 'DELETE'
         }).then(res => res.json()).then(data => {
             console.log('Producto eliminado del carrito:', data);
-            displayCartItems();
+            displayCartItems(); // Actualizar la lista de artículos del carrito
         }).catch(error => console.error('Error:', error));
     }
 
-    // Función para realizar la compra
-    function purchaseItems() {
-        fetch('http://135.232.96.13:8080/ws/realizar_compra', {
-            method: 'POST'
-        }).then(res => res.json()).then(data => {
-            console.log('Compra realizada:', data);
-            displayCartItems();
-        }).catch(error => console.error('Error:', error));
-    }
-
-    // Mostrar artículos del carrito al cargar la página
+    // Cargar los artículos del carrito al cargar la página
     displayCartItems();
-
-    // Agregar evento para los botones de eliminar
-    cartItemsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-button')) {
-            const productId = e.target.getAttribute('data-id');
-            removeFromCart(productId);
-        }
-    });
-
-    // Agregar evento para el botón de realizar compra
-    purchaseButton.addEventListener('click', purchaseItems);
 });
