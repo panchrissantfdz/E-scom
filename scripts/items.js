@@ -63,11 +63,17 @@ function addToCart(articleId) {
         body: JSON.stringify(requestBody)
     })
     .then(res => {
-        const errorResponse = res.json();
-        if (!res.ok) {
-            throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${errorResponse.message}`);
+        if(typeof res === "object") {
+            resObject = res.json();
+        } else {
+            resObject = res.text();
         }
-        return errorResponse;
+
+        if (!res.ok) {
+            throw new Error(`Error del servidor: ${res.status} ${res.statusText}. Detalles: ${resObject.message}`);
+        }
+
+        return resObject;
     })
     .then(data => {
         alert("Artículo agregado al carrito exitosamente.");
