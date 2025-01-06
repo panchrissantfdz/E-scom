@@ -124,7 +124,7 @@ function renderItems(items) {
         cantidadToAdd.classList.add("cantidad-input");
         cantidadToAdd.setAttribute("placeholder", "Cantidad");
         cantidadToAdd.setAttribute("type", "number");
-        cantidadToAdd.setAttribute("id", `quantity-${item.id}`);
+        cantidadToAdd.setAttribute("id", `quantity-${item["id_articulo"]}`);
         itemDiv.appendChild(cantidadToAdd);
 
         // Botón para agregar al carrito con data-id
@@ -133,7 +133,7 @@ function renderItems(items) {
         addToCartButton.textContent = "Agregar al Carrito";
 
         // Asociar ID del artículo en un atributo data-id
-        addToCartButton.setAttribute("data-id", item.id);
+        addToCartButton.setAttribute("data-id", item["id_articulo"]);
         addToCartButton.addEventListener("click", (event) => {
             const articleId = event.target.getAttribute("data-id");
             console.log("ID enviado a addToCart:", articleId);
