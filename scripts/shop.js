@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
             method: "GET"
         }).then(res => res.json()).then(cartItems => {
             renderCartItems(cartItems);
-        }).catch(error => console.error('Error:', error));
+        }).catch(error => {
+            console.error("Error al obtener los artículos del carrito:", error.message);
+            alert(`Error al cargar los artículos del carrito: ${error.message}`);
+        });
     }
 
     // Función para renderizar artículos en el contenedor del carrito
@@ -74,8 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ id_articulo: productId })
         }).then(res => res.json()).then(data => {
             console.log('Producto eliminado del carrito:', data);
+            alert('Artículo eliminado exitosamente del carrito.');
             displayCartItems(); // Actualizar la lista de artículos del carrito
-        }).catch(error => console.error('Error:', error));
+        }).catch(error => {
+            console.error("Error al eliminar el artículo del carrito:", error.message);
+            alert(`Error al eliminar el artículo del carrito: ${error.message}`);
+        });
     }
 
     // Función para realizar la compra
@@ -94,10 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
             Promise.all(promises)
                 .then(() => {
                     console.log("Compra exitosa");
+                    alert('Compra realizada exitosamente.');
                     displayCartItems(); // Actualizar la lista de artículos del carrito
                 })
-                .catch(error => console.error('Error durante la compra:', error));
-        }).catch(error => console.error('Error al obtener el carrito:', error));
+                .catch(error => {
+                    console.error("Error durante la compra:", error.message);
+                    alert(`Error al realizar la compra: ${error.message}`);
+                });
+        }).catch(error => {
+            console.error('Error al obtener los artículos del carrito:', error.message);
+            alert(`Error al cargar los artículos para la compra: ${error.message}`);
+        });
     }
 
     // Función para limpiar el carrito
@@ -116,10 +130,17 @@ document.addEventListener('DOMContentLoaded', () => {
             Promise.all(promises)
                 .then(() => {
                     console.log("Artículos eliminados del carrito exitosamente");
+                    alert('Carrito limpiado exitosamente.');
                     displayCartItems(); // Actualizar la lista de artículos del carrito
                 })
-                .catch(error => console.error('Error al limpiar el carrito:', error));
-        }).catch(error => console.error('Error al obtener el carrito:', error));
+                .catch(error => {
+                    console.error("Error al limpiar el carrito:", error.message);
+                    alert(`Error al limpiar el carrito: ${error.message}`);
+                });
+        }).catch(error => {
+            console.error('Error al obtener los artículos del carrito:', error.message);
+            alert(`Error al cargar los artículos para limpiar el carrito: ${error.message}`);
+        });
     }
 
     // Asignar eventos a los botones
