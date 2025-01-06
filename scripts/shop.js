@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cartItemsContainer = document.getElementById('cart-items');
     const purchaseButton = document.getElementById('purchase-button');
+    const clearButton = document.getElementById('clear-button');
 
     // Función para mostrar los artículos del carrito
     function displayCartItems() {
@@ -57,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             removeFromCartButton.setAttribute("data-id", item["id_articulo"]);
             removeFromCartButton.addEventListener("click", (event) => {
                 const articleId = event.target.getAttribute("data-id");
-                console.log("ID enviado a removeFromCart:", articleId);
                 removeFromCart(articleId); // Pasar el ID del artículo
             });
 
@@ -68,13 +68,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para eliminar un producto del carrito
     function removeFromCart(productId) {
-        fetch(`https://t9-2021630245.azurewebsites.net/api/EliminaArticulo/${productId}`, {
-            method: 'DELETE'
+        fetch('https://t9-2021630245.azurewebsites.net/api/EliminaCarrito', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_articulo: productId })
         }).then(res => res.json()).then(data => {
             console.log('Producto eliminado del carrito:', data);
             displayCartItems(); // Actualizar la lista de artículos del carrito
         }).catch(error => console.error('Error:', error));
     }
+
+    // Función para realizar la compra
+    function purchaseCart() {
+        fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
+            method: "GET"
+        }).then(res => res.json()).then(cartItems => {
+            const promises = cartItems.map(item =>
+                fetch('https://t9-2021630245.azurewebsites.net/api/EliminaCarrito', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_articulo: item.id_articulo })
+                })
+            );
+
+            Promise.all(promises)
+                .then(() => {
+                    console.log("Compra exitosa");
+                    displayCartItems(); // Actualizar la lista de artículos del carrito
+                })
+                .catch(error => console.error('Error durante la compra:', error));
+        }).catch(error => console.error('Error al obtener el carrito:', error));
+    }
+
+    // Función para limpiar el carrito
+    function clearCart() {
+        fetch('https://t9-2021630245.azurewebsites.net/api/ConsultaCarrito', {
+            method: "GET"
+        }).then(res => res.json()).then(cartItems => {
+            const promises = cartItems.map(item =>
+                fetch('https://t9-2021630245.azurewebsites.net/api/EliminaCarrito', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_articulo: item.id_articulo })
+                })
+            );
+
+            Promise.all(promises)
+                .then(() => {
+                    console.log("Artículos eliminados del carrito exitosamente");
+                    displayCartItems(); // Actualizar la lista de artículos del carrito
+                })
+                .catch(error => console.error('Error al limpiar el carrito:', error));
+        }).catch(error => console.error('Error al obtener el carrito:', error));
+    }
+
+    // Asignar eventos a los botones
+    purchaseButton.addEventListener("click", purchaseCart);
+    clearButton.addEventListener("click", clearCart);
 
     // Cargar los artículos del carrito al cargar la página
     displayCartItems();
